@@ -18,19 +18,677 @@
           aiden@between.us
         </script>
       </section>
-      
+
       <section data-markdown>
         <script type="text/template">
           ## Groovy
           
           Dynamic typed JVM language
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## List
+
+          Groovy uses java `List`
           
           ``` groovy
-          def arrayList = ['foo', 'bar', 'hello']
+          def groovyList = ['foo', 'bar']
+          List<String> javaList = Lists.newArrayList()
+          javaList.add("foo")
+          javaList.add("bar")
+
+          assert groovyList instanceof java.util.List
+          assert groovyList == javaList
+          ```
+
+          Access via `[]`
+
+          ``` groovy
+          def list = ['foo', 'bar']
+          assert list[0] == 'foo'
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Map
+          
+          Groovy uses java `Map`
+
+          ``` groovy
+          def groovyMap = [aiden: 'handsome', foo: 'bar']
+          Map<String, String> javaMap = Maps.newHashMap()
+          javaMap.put("aiden", "handsome")
+          javaMap.put("foo", "bar")
+
+          assert groovyMap instanceof java.util.LinkedHashMap
+          assert groovyMap == javaMap
+          ```
+
+          Access via `[]` or as an identifier
+
+          ``` groovy
+          def colors = [red: '#FF0000', green: '#00FF00']
+          assert colors['red'] == '#FF0000'
+          assert colors.green == '#00FF00'
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Map
+
+          Key other than `String` requires `()`
+
+          ``` groovy
+          def numbers = [(1): 'one', (2): 'two']
+          assert numbers[1] == 'one'
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Identifier
+
+          Groovy allows most string as identifier
+
+          ``` groovy
+          def foobar    // normal identifier
+          def "foo bar" // space is ok if quoted
+          def "^^"      // special char is ok
+
+          def map = [:]
+          map.break     // keyword is ok
+          map.'foo bar' // space is ok
+          ```
+        </script>
+      </section>
+
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Identifier
+
+          Getter and setter is automated
+
+          ``` groovy
+          class Aiden {
+            String lastName = 'Park';
+            boolean handsome = true;
+
+            public String getLastName() {
+              return lastName;
+            }
+            public void setLastName(String lastName) {
+              this.lastName = lastName;
+            }
+            public boolean isHandsome() {
+              return handsome;
+            }
+            public void setHandsome(boolean handsome) {
+              this.handsome = true;
+            }
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ``` groovy
+          def aiden = new Aiden()
+          assert aiden.handsome
+          assert aiden.lastName == 'Park'
+          
+          aiden.handsome = false
+          aiden.lastName = 'Kim'
+          assert aiden.handsome
+          assert aiden.lastName == 'Kim'
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## With block
+
+          ``` groovy
+          def aiden = new Aiden()
+          aiden.with {
+            lastName = 'Park'
+            handsome = true
+          }
+
+          // same as
+          aiden.lastName = 'Park'
+          aiden.handsome = true
           ```
         </script>
       </section>
       
+      
+      <section data-markdown>
+        <script type="text/template">
+          # [Spock](http://meetspock.appspot.com/)
+        </script>
+      </section>
+
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Spock
+
+          Specification library
+          
+          > **Specification** _(in BDD)_
+          >
+          > User story from the field of object-oriented analysis and design
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ``` groovy
+          import spock.lang.Specification
+
+          class MySpecification extends Specification {
+            // fields, fixtures, helper methods, specifications, ...
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ``` groovy
+          def setup() {
+            // @BeforeMethod
+          }
+
+          def cleanup() {
+            // @AfterMethod
+          }
+
+          def setupSpec() {
+            // @BeforeClass
+          }
+
+          def cleanupSpec() {
+            // @AfterClass
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Feature
+
+          Use the power of dynamic language
+
+          ``` groovy
+          def "pushing an element on the stack"() {
+            // feature goes here
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Feature Block
+
+          ![](http://spockframework.org/spock/docs/1.1-rc-3/images/Blocks2Phases.png)
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Setup, When, Then
+
+          ``` groovy
+          def "pushing an element on the stack"() {
+            setup:
+            def stack = new Stack()
+            def elem = "push me"
+
+            when:
+            stack.push(elem)
+
+            then:
+            !stack.empty
+            stack.size() == 1
+            stack.peek() == elem
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## thrown
+
+          ``` groovy
+          def "pop from empty stack"() {
+            setup:
+            stack = new Stack()
+
+            when:
+            stack.pop()
+
+            then:
+            thown(EmptyStackException)
+            stack.empty
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## notThrown
+
+          ``` groovy
+          def "pop from non-empty stack"() {
+            setup:
+            stack = new Stack()
+            stack.push('elem')
+
+            when:
+            stack.pop()
+
+            then:
+            notThrown(EmptyStackException)
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Expect
+
+          Use when expect is natural.
+
+          ``` groovy
+          def "compute maximum of two numbers"() {
+            when:
+            def result = Math.max(1, 2)
+
+            then:
+            result == 2
+          }
+          ```
+
+          ``` groovy
+          def "compute maximum of two numbers"() {
+            expect:
+            Math.max(1, 2) == 2
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          **Expect** block is more limited
+
+          e.g. `thrown` is only available in **Then** block.
+        </script>
+      </section>
+
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Where
+
+          For data-driven test
+
+          ``` groovy
+          def "compute maximum of two numbers"() {
+            expect:
+            c == Math.max(a, b)
+
+            where:
+            a << [5, 3]
+            b << [1, 9]
+            c << [5, 9]
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Where
+
+          Some syntatic sugars
+
+          ``` groovy
+          def "compute maximum of #a and #b"() {
+            expect:
+            c == Math.max(a, b)
+
+            where:
+            a | b | c
+            5 | 3 | 5
+            3 | 9 | 9
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ``` groovy
+          def "compute maximum of #a and #b"() {
+            where:
+            a | b | c
+            5 | 3 | 5
+            3 | 9 | 9
+          }
+
+          def "compute maximum of #a and #b"() {
+            // ... 
+
+            where:
+            a | b || c
+            5 | 3 || 5
+            3 | 9 || 9
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Cleanup
+
+          ``` groovy
+          setup:
+          def file = new File('/some/path')
+          file.createNewFile()
+
+          // ...
+
+          cleanup:
+          file.delete()
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## With
+
+          ``` groovy
+          def "offered PC matches preferred configuration"() {
+            when:
+            def pc = show.buyPc()
+
+            then:
+            with(pc) {
+              vender == 'Sunny'
+              clockRate >= 2333
+              ram >= 406
+              os == 'Linux'
+            }
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Spec as documentation
+
+          ### Use string as block label
+
+          ``` groovy
+          def "initialize database"() {
+            setup: "open a database connection"
+            // code goes here
+
+            and: "seed the custom table"
+            // code goes here
+
+            when: "attempt initialize"
+            // ...
+
+            then: "initialize succeed"
+            // ...
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Spec as documentation
+
+          ### multiple when/then
+
+          ``` groovy
+          def "stack scenario"() {
+            setup:
+            stack = new Stack()
+            when:
+            stack.push('elem')
+            then:
+            stack.size == 1
+            when: 
+            stack.pop()
+            then:
+            stack.empty
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          # Interaction based testing
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          - Mock
+          - Stub
+          - Spy
+          
+          (see Martin Fowler's [article](https://martinfowler.com/articles/mocksArentStubs.html))
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Mock
+
+          > **Mocks** are objects pre-programmed with expectations which form a specification of the calls they are expected to receive.
+          >
+          > Martin Fowler
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Mock
+
+          ``` groovy
+          def "should send messages to all subscribers"() {
+            setup:
+            Publish publisher = new Publisher()
+            def subscriber = Mock(Subscriber) 
+            Subscriber subscriber2 = Mock()
+            publisher << [subscriber, subscriber2]
+
+            when:
+            publisher.send("hello")
+
+            then:
+            1 * subscriber.receive("hello")
+            1 * subscriber2.receive("hello")
+          }
+          ```
+        </script>
+      </section>
+      
+      <section data-markdown>
+        <script type="text/template">
+          ## Cardinality
+
+          ``` groovy
+          1 * subscriber.receive("hello")
+          0 * subscriber.receive("hello")
+          (1..3) * subscriber.receive("hello")
+          (1.._) * subscriber.receive("hello")
+          (_..3) * subscriber.receive("hello")
+          _ * subscriber.receive("hello")
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Argument Constraints
+
+          ``` groovy
+          1 * subscriber.receive("hello")  // equal
+          1 * subscriber.receive(!"hello") // notequal
+          1 * subscriber.receive()         // empty arg
+          1 * subscriber.receive(_)        // any arg
+          1 * subscriber.receive(*_)       // any arg list
+          1 * subscriber.receive(!null)    // nonnull
+          1 * subscriber.receive(_ as String)
+          1 * subscriber.receive({ it.size() > 3 })
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Strict Mocking
+
+          ``` groovy
+          def () {
+            when:
+            publisher.publish("hello")
+
+            then:
+            1 * subscriber.receive("hello")
+            0 * _   // don't allow any other Mock interaction
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Initializing Mock
+
+          ``` groovy
+          class MySpec extends Specification {
+            Subscriber subscriber = Mock {
+              1 * receive("hello")
+              1 * receive("goodbye")
+            }
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Stub
+
+          > **Stubs** provide canned answers to calls made during the test, usually not responding at all to anything outside what's programmed in for the test.
+          >
+          > Martin Fowler
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Stub
+
+          ``` groovy
+          def "should send messages to all subscribers"() {
+            // ...
+
+            then:
+            subscriber.receive("message1") >> "ok"
+            subscriber.receive("message2") >> "fail"
+            subscriber.receive(_) >> "ok"
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Compute return values
+
+          ``` groovy
+          def "should send messages to all subscribers"() {
+            // ...
+
+            then:
+            subscriber.receive(_) >> { args -> 
+              return args[0].size() > 3 ? "ok" : "fail" 
+            }
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Combine with Mock
+
+          ``` groovy
+          def "should send messages to all subscribers"() {
+            // ...
+
+            then:
+            1 * subscriber.receive("message1") >> "ok"
+          }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          ## Extensions
+          ``` groovy
+          @Ignore
+          def "this is ignored"() { ... }
+
+          @IgnoreIf({ os.windows })
+          def "I'll run everywhere but on Windows"() { ... }
+
+          @Timeout(5)
+          def "I fail if I run for more than five seconds"() { ... }
+          ```
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          And many other things at [spockframework.org](http://spockframework.org/spock/docs/1.1-rc-3/index.html)
+        </script>
+      </section>
+
+      <section data-markdown>
+        <script type="text/template">
+          # Thank you
+        </script>
+      </section>
     </div>
   </div>
 
