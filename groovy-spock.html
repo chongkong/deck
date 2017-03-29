@@ -1,0 +1,50 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <title>Groovy Spock</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/theme/white.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class="cover" data-markdown>
+        <script type="text/template">
+          # Spock
+          
+          ### for better unit testing
+          
+          aiden@between.us
+        </script>
+      </section>
+      
+      <section data-markdown>
+        <script type="text/template">
+          ## Groovy
+          
+          Dynamic typed JVM language
+          
+          ``` groovy
+          def arrayList = ['foo', 'bar', 'hello']
+          ```
+        </script>
+      </section>
+      
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/js/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      dependencies: [
+        { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/marked.js' },
+        { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/markdown/markdown.js' },
+        { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/highlight/highlight.js',
+          async: true,
+          callback: () => hljs.initHighlightingOnLoad() }
+      ]
+    });
+  </script>
+</body>
